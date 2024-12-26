@@ -1,2 +1,2 @@
 # bleite7.github.io
-Meu site pessoal.
+My personal website built with Jekyll.
