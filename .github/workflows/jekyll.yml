@@ -5,11 +5,13 @@
 
 # Sample workflow for building and deploying a Jekyll site to GitHub Pages
 name: Deploy Jekyll site to Pages
-
 on:
   # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
+  pull_request:
+    branches:
+      - main
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -28,7 +30,7 @@ concurrency:
 
 jobs:
   # Build job
-  build:
+  Build:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
@@ -52,12 +54,13 @@ jobs:
         uses: actions/upload-pages-artifact@v3
 
   # Deployment job
-  deploy:
+  Deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
+    runs-on: ubuntu-24.04
+    if: ${{ success() && github.event_name != 'pull_request' }}
+    needs: Build
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
